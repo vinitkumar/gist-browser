@@ -30,3 +30,21 @@
 .gistList {
   list-style: none;
 }
+
+.sidebar {
+  border-right: 1px solid gainsboro;
+}
+
+.main-content {
+  padding: 40px;
+}
+
+.gist-item a {
+  word-wrap: break-word;
+  font-size: 12px;
+}
+
+.gistResultContainer {
+  padding-left: 40px;
+  padding-right: 40px;
+}

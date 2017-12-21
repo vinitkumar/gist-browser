@@ -4,7 +4,8 @@ import {BrowserRouter as Router, Link} from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Highlight from 'react-highlight';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/styles/hljs';
 
 class Gist extends Component {
   constructor(props) {
@@ -34,13 +35,18 @@ class Gist extends Component {
 
   render() {
     return(
-        <div>
+        <div className="gistResultContainer">
           <h1>{this.gist.id}</h1>
           <pre>Created on {this.gist.created_at}</pre>
           <pre>{this.gist.description}</pre>
-          <code>
-            {this.state.fileContent}
-          </code>
+          { this.state.language &&
+          <SyntaxHighlighter language={this.state.language} style={docco}>{this.state.fileContent}</SyntaxHighlighter> }
+          {!this.state.language && <pre>
+              <code lang={this.state.language}>
+              {this.state.fileContent}
+              </code>
+            </pre>
+          }
         </div>
     );
   }
@@ -55,7 +61,7 @@ class GistList extends Component {
     if (gists !== null && gists.length > 0) {
       gists.forEach((gist, key) => {
         const linkName = gist.description || gist.id;
-        gistArray.push(<li key={key}><Link to={`/gist/${gist.id}`}>{linkName}</Link></li>);
+        gistArray.push(<li className="gist-item" key={key}><Link to={`/gist/${gist.id}`}>{linkName}</Link></li>);
       });
     }
     if (gists !== undefined && Array.isArray(gists) === false) {
@@ -63,9 +69,6 @@ class GistList extends Component {
     }
     return(
       <div>
-        <Link to="/">
-          <img src={logo} className="App-logo" alt="logo" height="50" width="50"/>
-        </Link>
         <ul className="gistList">
           {gistArray}
           {errorMSGBox}
@@ -98,11 +101,12 @@ class App extends Component {
     return (
       <Router>
         <div className="container-fluid">
+          <h1> Realtime Gist Monitor <img src={logo} className="App-logo" alt="logo" height="50" width="50"/></h1>
           <div className="row">
-            <div className="col-4">
+            <div className="col-4 sidebar">
               <GistList gists={this.state.gistList} />
             </div>
-            <div className="col-8">
+            <div className="col-8 main-content">
               <Route exact path="/"  render={() => <div>Welcome</div>} />
               { gists && (
                 <Route path="/gist/:gistId" render={({match})=> (
