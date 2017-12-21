@@ -4,7 +4,7 @@ import {BrowserRouter as Router, Link} from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import Highlight from 'react-highlight';
 
 class Gist extends Component {
   constructor(props) {
@@ -12,6 +12,7 @@ class Gist extends Component {
     this.gist = this.props.gist;
     this.state = {
       fileContent: null,
+      language: null,
     };
   }
 
@@ -23,13 +24,12 @@ class Gist extends Component {
       fetch(raw_url)
         .then((response) => response.text())
         .then((content) => {
-          self.setState({fileContent: content});
+          self.setState({
+            fileContent: content, 
+            language: file.language
+          });
         });
     });
-  }
-
-  componentWillUnmount() {
-    this.setState({fileContent: null});
   }
 
   render() {
@@ -38,11 +38,9 @@ class Gist extends Component {
           <h1>{this.gist.id}</h1>
           <pre>Created on {this.gist.created_at}</pre>
           <pre>{this.gist.description}</pre>
-          <pre>
-            <code>
-              {/* {this.state.fileContent} */}
-            </code>
-          </pre>
+          <code>
+            {this.state.fileContent}
+          </code>
         </div>
     );
   }
@@ -88,11 +86,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const self = this;
       fetch('https://api.github.com/gists?client_id=6396a71f53863e556b11&&client_secret=098d29751f484f46307027baf674d072ae97050a`')
         .then(res => res.json())
         .then(gists => {
-          self.setState({gistList: gists})
+          this.setState({gistList: gists})
         });
   }
 
@@ -109,7 +106,7 @@ class App extends Component {
               <Route exact path="/"  render={() => <div>Welcome</div>} />
               { gists && (
                 <Route path="/gist/:gistId" render={({match})=> (
-                  <Gist gist={gists.find(g=> g.id === match.params.gistId )} />
+                  <Gist key={match.params.gistId} gist={gists.find(g=> g.id === match.params.gistId )} />
                 )} />
               )}
             </div>
