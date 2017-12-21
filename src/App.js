@@ -3,6 +3,77 @@ import logo from './logo.svg';
 import {BrowserRouter as Router, Link} from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+class Gist extends Component {
+  constructor(props) {
+    super(props);
+    this.gist = this.props.gist;
+    this.state = {
+      fileContent: null,
+    };
+  }
+
+  componentDidMount() {
+    const self = this;
+    const allFiles = Object.values(this.gist.files);
+    allFiles.forEach((file, key) => {
+      const raw_url = file.raw_url;
+      fetch(raw_url)
+        .then((response) => response.text())
+        .then((content) => {
+          self.setState({fileContent: content});
+        });
+    });
+  }
+
+  render() {
+    return(
+        <div>
+          <h1>{this.gist.id}</h1>
+          <pre>Created on {this.gist.created_at}</pre>
+          <pre>{this.gist.description}</pre>
+          <pre>
+            <code>
+              {this.state.fileContent}
+            </code>
+          </pre>
+        </div>
+    );
+  }
+
+}
+
+class GistList extends Component {
+  render() {
+    const gists = this.props.gists;
+    const gistArray = [];
+    let errorMSGBox = [];
+    if (gists !== null && gists.length > 0) {
+      gists.forEach((gist, key) => {
+        const linkName = gist.description || gist.id;
+        gistArray.push(<li key={key}><Link to={`/gist/${gist.id}`}>{linkName}</Link></li>);
+      });
+    }
+    if (gists !== undefined && Array.isArray(gists) === false) {
+      console.log('I am gists', gists);
+    }
+    return(
+      <div>
+        <Link to="/">
+          <img src={logo} className="App-logo" alt="logo" height="50" width="50"/>
+        </Link>
+        <ul className="gistList">
+          {gistArray}
+          {errorMSGBox}
+        </ul>
+      </div>
+    );
+  }
+}
+
+
 
 class App extends Component {
   constructor(props) {
@@ -24,17 +95,19 @@ class App extends Component {
     const gists = this.state.gistList;
     return (
       <Router>
-        <div className="App">
-          <div className="App-intro">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-4">
               <GistList gists={this.state.gistList} />
-          </div>
-          <div>
-            <Route exact path="/"  render={() => <div>Welcome</div>} />
-            { gists && (
-              <Route path="/gist/:gistId" render={({match})=> (
-                <Gist gist={gists.find(g=> g.id === match.params.gistId )} />
-              )} /> 
-            )}
+            </div>
+            <div className="col-8">
+              <Route exact path="/"  render={() => <div>Welcome</div>} />
+              { gists && (
+                <Route path="/gist/:gistId" render={({match})=> (
+                  <Gist gist={gists.find(g=> g.id === match.params.gistId )} />
+                )} />
+              )}
+            </div>
           </div>
         </div>
       </Router>
@@ -44,60 +117,3 @@ class App extends Component {
 
 export default App;
 
-
-const Gist = ({ gist}) => {
-  console.log(typeof(gist.files));
-  let filesContainer = [];
-  // gist.files.map((file) => {
-  //   filesContainer.push(
-  //     <div>
-  //       {file.filename}
-  //       {file.language}
-  //     </div>
-  //   );
-  // });
-  const description = gist.description || 'No description Sorry!';
-  
-  return (
-    <div> 
-      <h1>{gist.id}</h1>
-      <pre>Created on {gist.created_at}</pre>
-      <pre>{description}</pre>
-      <p>
-        {filesContainer}
-      </p>
-    </div>
-  )
-};
-
-class GistList extends Component {
-  render() {
-    const gists = this.props.gists;
-    const gistArray = [];
-    let errorMSGBox = [];
-    debugger;
-    if (gists !== null && gists.length > 0) {
-      gists.forEach((gist, key) => {
-        const linkName = gist.description || gist.id;
-        gistArray.push(<li key={key}><Link to={`/gist/${gist.id}`}>{linkName}</Link></li>);
-      });
-    }
-    if (gists !== undefined && Array.isArray(gists) === false) {
-      console.log('I am gists', gists);
-      // Object.values(gists).forEach((message, key) => {
-      //   errorMSGBox.push(<h1 key={key}>{message}</h1>)
-      // });
-    }
-    return(
-      <div>
-        <Link to="/">
-          <img src={logo} className="App-logo" alt="logo" height="50" width="50"/>
-        </Link>
-        <ul className="gistList">
-          {gistArray}
-          {errorMSGBox}
-        </ul>
-      </div>
-    );
-  }
-}
