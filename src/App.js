@@ -13,7 +13,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-      fetch('https://api.github.com/gists?client_id=2ee21061ca9ec6085e38&&client_secret=f0f906d1f5f02623a010884370655da4595d301d`')
+      fetch('https://api.github.com/gists?client_id=6396a71f53863e556b11&&client_secret=098d29751f484f46307027baf674d072ae97050a`')
         .then(res => res.json())
         .then(gists => {
           this.setState({gistList: gists})
@@ -74,13 +74,20 @@ class GistList extends Component {
   render() {
     const gists = this.props.gists;
     const gistArray = [];
-    if (gists) {
+    let errorMSGBox = [];
+    debugger;
+    if (gists !== null && gists.length > 0) {
       gists.forEach((gist, key) => {
         const linkName = gist.description || gist.id;
         gistArray.push(<li key={key}><Link to={`/gist/${gist.id}`}>{linkName}</Link></li>);
       });
     }
-
+    if (gists !== undefined && Array.isArray(gists) === false) {
+      console.log('I am gists', gists);
+      // Object.values(gists).forEach((message, key) => {
+      //   errorMSGBox.push(<h1 key={key}>{message}</h1>)
+      // });
+    }
     return(
       <div>
         <Link to="/">
@@ -88,6 +95,7 @@ class GistList extends Component {
         </Link>
         <ul className="gistList">
           {gistArray}
+          {errorMSGBox}
         </ul>
       </div>
     );
