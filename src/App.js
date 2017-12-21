@@ -18,6 +18,9 @@ class Gist extends Component {
   }
 
   componentDidMount() {
+    if (!this.gist) {
+      return;
+    }
     const self = this;
     const allFiles = Object.values(this.gist.files);
     allFiles.forEach((file, key) => {
@@ -34,6 +37,13 @@ class Gist extends Component {
   }
 
   render() {
+    if (!this.gist) {
+      return (
+        <div className="alert alert-danger">
+          This gist is not available anymore. <Link to="/">Go home</Link>.
+        </div>
+      );
+    }
     return(
         <div className="gistResultContainer">
           <h1>{this.gist.id}</h1>
