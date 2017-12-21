@@ -28,6 +28,10 @@ class Gist extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.setState({fileContent: null});
+  }
+
   render() {
     return(
         <div>
@@ -36,7 +40,7 @@ class Gist extends Component {
           <pre>{this.gist.description}</pre>
           <pre>
             <code>
-              {this.state.fileContent}
+              {/* {this.state.fileContent} */}
             </code>
           </pre>
         </div>
@@ -84,10 +88,11 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const self = this;
       fetch('https://api.github.com/gists?client_id=6396a71f53863e556b11&&client_secret=098d29751f484f46307027baf674d072ae97050a`')
         .then(res => res.json())
         .then(gists => {
-          this.setState({gistList: gists})
+          self.setState({gistList: gists})
         });
   }
 
