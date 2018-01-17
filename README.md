@@ -9,6 +9,7 @@ Make sure you have Node.js, npm and yarn installed.
 ```
 # install dependencies
 yarn 
+
 # Run the project
 yarn start
 
