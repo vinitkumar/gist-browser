@@ -2,93 +2,11 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import {BrowserRouter as Router, Link} from 'react-router-dom';
 import { Route } from 'react-router-dom';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/styles/hljs';
-
-class Gist extends Component {
-  constructor(props) {
-    super(props);
-    this.gist = this.props.gist;
-    this.state = {
-      fileContent: null,
-      language: null,
-    };
-  }
-
-  componentDidMount() {
-    if (!this.gist) {
-      return;
-    }
-    const self = this;
-    const allFiles = Object.values(this.gist.files);
-    allFiles.forEach((file, key) => {
-      const raw_url = file.raw_url;
-      fetch(raw_url)
-        .then((response) => response.text())
-        .then((content) => {
-          self.setState({
-            fileContent: content, 
-            language: file.language
-          });
-        });
-    });
-  }
-
-  render() {
-    if (!this.gist) {
-      return (
-        <div className="alert alert-danger">
-          This gist is not available anymore. <Link to="/">Go home</Link>.
-        </div>
-      );
-    }
-    return(
-        <div className="gistResultContainer">
-          <h1>{this.gist.id}</h1>
-          <pre>Created on {this.gist.created_at}</pre>
-          <pre>{this.gist.description}</pre>
-          { this.state.language &&
-          <SyntaxHighlighter language={this.state.language} style={docco}>{this.state.fileContent}</SyntaxHighlighter> }
-          {!this.state.language && <pre>
-              <code lang={this.state.language}>
-              {this.state.fileContent}
-              </code>
-            </pre>
-          }
-        </div>
-    );
-  }
-
-}
-
-class GistList extends Component {
-  render() {
-    const gists = this.props.gists;
-    const gistArray = [];
-    let errorMSGBox = [];
-    if (gists !== null && gists.length > 0) {
-      gists.forEach((gist, key) => {
-        const linkName = gist.description || gist.id;
-        gistArray.push(<li className="gist-item" key={key}><Link to={`/gist/${gist.id}`}>{linkName}</Link></li>);
-      });
-    }
-    if (gists !== undefined && Array.isArray(gists) === false) {
-      console.log('I am gists', gists);
-    }
-    return(
-      <div>
-        <ul className="gistList">
-          {gistArray}
-          {errorMSGBox}
-        </ul>
-      </div>
-    );
-  }
-}
-
-
+import Gist from './Gist';
+import GistList from './GistList';
 
 class App extends Component {
   constructor(props) {
@@ -132,4 +50,3 @@ class App extends Component {
 }
 
 export default App;
-
