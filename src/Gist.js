@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Moment from 'moment';
 import {Link} from 'react-router-dom';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/styles/hljs';
@@ -43,7 +44,7 @@ class Gist extends Component {
     return(
         <div className="gistResultContainer">
           <h1>{this.gist.id}</h1>
-          <pre>Created on {this.gist.created_at}</pre>
+          <pre>Created on {Moment(this.gist.created_at).format('LLL')}</pre>
           <pre>{this.gist.description}</pre>
           { this.state.language &&
           <SyntaxHighlighter language={this.state.language} style={docco}>{this.state.fileContent}</SyntaxHighlighter> }
