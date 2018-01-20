@@ -9,8 +9,7 @@ class Gist extends Component {
     super(props);
     this.gist = this.props.gist;
     this.state = {
-      fileContent: null,
-      language: null,
+      allRawFiles: null,
     };
   }
 
@@ -20,17 +19,25 @@ class Gist extends Component {
     }
     const self = this;
     const allFiles = Object.values(this.gist.files);
+    let allRawFilesArray = [];
     allFiles.forEach((file, key) => {
       const raw_url = file.raw_url;
+      const fileName = file.raw_url.split('/')[file.raw_url.split('/').length - 1];
       fetch(raw_url)
         .then((response) => response.text())
         .then((content) => {
+          allRawFilesArray.push({
+            content: content,
+            language: file.language,
+            fileName: fileName,
+          });
           self.setState({
-            fileContent: content, 
+            content: content,
             language: file.language
           });
         });
     });
+    this.setState({allRawFiles: allRawFilesArray});
   }
 
   render() {
@@ -41,20 +48,27 @@ class Gist extends Component {
         </div>
       );
     }
+    const allFiles = this.state.allRawFiles;
+    let allFilesContainer = null;
+    if (allFiles !== null) {
+      allFilesContainer = [];
+      allFiles.forEach((fileObject, key) => {
+        allFilesContainer.push(
+          <div key={key}>
+            <pre>{fileObject.fileName}</pre>
+            <SyntaxHighlighter language={fileObject.language} style={docco}>{fileObject.content}</SyntaxHighlighter>
+          </div>
+        );
+      });
+    }
+
     return(
         <div className="gistResultContainer">
           <h1>{this.gist.id}</h1>
           <pre>Created on {Moment(this.gist.created_at).format('LLL')}</pre>
           <pre>{this.gist.description}</pre>
-          { this.state.language &&
-          <SyntaxHighlighter language={this.state.language} style={docco}>{this.state.fileContent}</SyntaxHighlighter> }
-          {!this.state.language && <pre>
-              <code lang={this.state.language}>
-              {this.state.fileContent}
-              </code>
-            </pre>
-          }
-        </div>
+          {allFilesContainer}
+          </div>
     );
   }
 
