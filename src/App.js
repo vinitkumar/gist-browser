@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import {BrowserRouter as Router, Link} from 'react-router-dom';
+import {BrowserRouter as Router} from 'react-router-dom';
 import { Route } from 'react-router-dom';
-import SyntaxHighlighter from 'react-syntax-highlighter';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Gist from './Gist';
