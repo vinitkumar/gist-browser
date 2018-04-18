@@ -11,7 +11,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gistList: null,
+      gistList: [],
+      error: null,
     };
   }
 
@@ -20,18 +21,25 @@ class App extends Component {
         .then(res => res.json())
         .then(gists => {
           this.setState({gistList: gists})
+        }).catch((error) => {
+          this.setState({
+            error: error.message
+          })
+          console.log(error);
         });
   }
 
   render() {
-    const gists = this.state.gistList;
+    const { gistList, error } = this.state;
+    const gists = gistList;
     return (
       <Router>
         <div className="container-fluid">
           <h1> Realtime Gist Monitor <img src={logo} className="App-logo" alt="logo" height="50" width="50"/></h1>
+          { error && <div className="alert alert-danger" role="alert">error: {error} </div>}
           <div className="row">
             <div className="col-4 sidebar">
-              <GistList gists={this.state.gistList} />
+              { !error && <GistList gists={gistList} /> }
             </div>
             <div className="col-8 main-content">
               <Route exact path="/"  render={() => <div>Welcome</div>} />
