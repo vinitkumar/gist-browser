@@ -10,7 +10,7 @@ class GistList extends Component {
           {this.props.gists && this.props.gists.map((gist, key) => (
             <li className="gist-item" key={key}>
               <Link to={`/gist/${gist.id}`}>
-                <img className="avatarImg" src={gist.owner.avatar_url + '&s=20'} height="20" width="20" /><span>{gist.owner.login}'s gist</span>
+                <img className="avatarImg" src={gist.owner.avatar_url + '&s=20'} height="20" width="20" alt="avatar-img" /><span>{gist.owner.login}'s gist</span>
               </Link>
             </li>
           )

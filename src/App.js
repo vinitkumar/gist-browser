@@ -36,7 +36,7 @@ class App extends Component {
             </div>
             <div className="col-8 main-content">
               <Route exact path="/"  render={() => <div>Welcome to the gist dashboard that shows the gists created in realtime.
-                Please click on a link in sidebar to check them.👈 </div>} />
+                Please click on a link in sidebar to check them.<span  role="img" aria-label="left-point-emoji">👈 </span></div>} />
               { gists && (
                 <Route path="/gist/:gistId" render={({match})=> (
                   <Gist key={match.params.gistId} gist={gists.find(g=> g.id === match.params.gistId )} />
