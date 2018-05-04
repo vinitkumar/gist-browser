@@ -64,8 +64,8 @@ class Gist extends Component {
 
     return(
         <div className="gistResultContainer">
-          <h1>{this.gist.id}</h1>
-          <pre>Created on {Moment(this.gist.created_at).format('LLL')}</pre>
+          <h3>{this.gist.owner.login} shared the gist:</h3>
+          <small><pre>Created on {Moment(this.gist.created_at).format('LLL')}</pre></small>
           <pre>{this.gist.description}</pre>
           {allFilesContainer}
           </div>

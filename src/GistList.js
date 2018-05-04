@@ -8,7 +8,12 @@ class GistList extends Component {
       <div>
         <ul className="gistList">
           {this.props.gists && this.props.gists.map((gist, key) => (
-            <li className="gist-item" key={key}><Link to={`/gist/${gist.id}`}>{gist.id}</Link></li>)
+            <li className="gist-item" key={key}>
+              <Link to={`/gist/${gist.id}`}>
+                <img className="avatarImg" src={gist.owner.avatar_url + '&s=20'} height="20" width="20" /><span>{gist.owner.login}'s gist</span>
+              </Link>
+            </li>
+          )
           )}
         </ul>
       </div>
