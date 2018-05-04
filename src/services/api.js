@@ -9,5 +9,4 @@ const fetchData = async function() {
     });
 };
 
-
 export default fetchData;

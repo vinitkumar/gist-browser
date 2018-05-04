@@ -30,22 +30,7 @@ describe('dummy test', () => {
         .then(res => res.json())
         .then(gists => {
           expect(typeof(gists)).toBe('object')
-          console.log(gists);
         });
   });
-  //it('test GistList Component', async(done) => {
-  //});
 });
 
-
-//it('renders without crashing', () => {
-//  const div = document.createElement('div');
-//  ReactDOM.render(<App />, div);
-//});
-//});
-
-
-//it('renders without crashing', () => {
-//  const div = document.createElement('div');
-//  ReactDOM.render(<App />, div);
-//});
