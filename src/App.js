@@ -6,6 +6,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Gist from './Gist';
 import GistList from './GistList';
+import fetchData from './services/api';
 
 class App extends Component {
   constructor(props) {
@@ -17,17 +18,31 @@ class App extends Component {
   }
 
   componentDidMount() {
-      fetch('https://api.github.com/gists?client_id=6396a71f53863e556b11&&client_secret=098d29751f484f46307027baf674d072ae97050a`')
-        .then(res => res.json())
-        .then(gists => {
-          this.setState({gistList: gists})
-        }).catch((error) => {
-          this.setState({
-            error: error.message
-          })
-          console.log(error);
-        });
+      const data = fetchData();
+      data.then((result) => console.log(result));
+      debugger;
+      // fetch('https://api.github.com/gists?client_id=6396a71f53863e556b11&&client_secret=098d29751f484f46307027baf674d072ae97050a`')
+      //   .then(res => res.json())
+      //   .then(gists => {
+      //     this.setState({gistList: gists})
+      //   }).catch((error) => {
+      //     this.setState({
+      //       error: error.message
+      //     })
+      //     console.log(error);
+      //   });
   }
+  
+  // fetchData = async () => {
+  //   return await fetch('https://api.github.com/gists?client_id=6396a71f53863e556b11&&client_secret=098d29751f484f46307027baf674d072ae97050a`')
+  //       .then(res => res.json())
+  //       .then(gists => {
+  //         console.log('data coming from fetchData');
+  //         return gists
+  //       }).catch((error) => { 
+  //         console.log(error);
+  //       });
+  // };
 
   render() {
     const { gistList, error } = this.state;
