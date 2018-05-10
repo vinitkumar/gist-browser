@@ -1,10 +1,10 @@
-## Realtime Gist Monitor
+## Gist Monitor Dashboard
 
 [![Build Status](https://travis-ci.com/vinitkumar/gist-browser.svg?branch=master)](https://travis-ci.com/vinitkumar/gist-browser)
 
 ![screenshot](https://cldup.com/FnSnyMtqvQ.png)
 
-The project is build with create-react-app and uses React and Gist APIs from google to create a realtime Gist monitor for public Gists
+The project is built with create-react-app and uses React and Gist APIs from GitHub to create a realtime Gist monitor for public Gists
 
 ### Installation
 
