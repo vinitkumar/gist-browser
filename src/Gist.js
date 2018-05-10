@@ -29,7 +29,7 @@ class Gist extends Component {
           allRawFilesArray.push({
             content: content,
             language: file.language,
-            fileName: fileName,
+            fileName: decodeURIComponent(fileName),
           });
           self.setState({
             content: content,
