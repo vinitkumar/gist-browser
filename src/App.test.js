@@ -19,13 +19,15 @@ describe('test the gist browser', () => {
 
   it('does render the app', done => {
     const wrapper = shallow(<App />);
-    setTimeout(() => {
+    process.nextTick(() => {
       wrapper.update();
-      let state = wrapper.instance().state;
+      const state = wrapper.instance().state;
+      expect(state).toBeDefined();
+      expect(state.gistList.length).toEqual(2);
       expect(state.error).toBeNull();
+      expect(wrapper.find('GistList').length).toEqual(1);;
     });
     done();
   });
-
 });
 
