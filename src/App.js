@@ -24,7 +24,6 @@ class App extends Component {
   render() {
     const { gistList, error } = this.state;
     const gists = gistList;
-    console.log(gists);
     return (
       <Router>
         <div className="container-fluid">
