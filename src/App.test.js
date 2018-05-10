@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import renderer from 'react-test-renderer';
 import App from './App';
 import GistList from './GistList';
-import { mount } from 'enzyme';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import Enzyme, { shallow, render, mount } from "enzyme";
 
 configure({ adapter: new Adapter() });
 jest.mock("./services/api");
