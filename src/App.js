@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './App.css';
 import Gist from './Gist';
 import GistList from './GistList';
-import logo from './logo.svg';
 import fetchData from './services/api';
 
 class App extends Component {
@@ -13,21 +12,36 @@ class App extends Component {
     this.state = {
       gistList: [],
       error: null,
+      loading: true,
     };
+
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount() {
       const data = fetchData();
-      data.then((gists) => this.setState({gistList: gists}));
+      data.then((gists) => this.setState({gistList: gists, loading: false}));
+  }
+
+  refresh(event) {
+    this.setState({loading: true});
+    const data = fetchData();
+    data.then((gists) => this.setState({gistList: gists, loading: false}));
+
   }
 
   render() {
-    const { gistList, error } = this.state;
+    const { gistList, error, loading } = this.state;
     const gists = gistList;
     return (
       <Router>
         <div className="container-fluid">
-          <h1><Link to="/">Gist Dashboard <img src={logo} className="App-logo" alt="logo" height="50" width="50"/></Link></h1>
+          <h1><Link to="/">Gist Dashboard</Link>
+            <a className="refresh" title="Refresh" onClick={this.refresh.bind(this)}>
+              {!loading && <i className="fa fa-refresh"></i> }
+              {loading && <i className="fa fa-spin fa-refresh"></i>}
+            </a>
+          </h1>
           { error && <div className="alert alert-danger" role="alert">error: {error} </div>}
           <div className="row">
             <div className="col-4 sidebar">

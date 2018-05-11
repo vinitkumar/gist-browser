@@ -53,3 +53,13 @@
 a:hover {
   text-decoration: none;
 }
+a.refresh {
+  margin-left: 6px;
+}
+
+a.refresh > i {
+  color: blue;
+}
+a.refresh > i.fa-spin {
+  color: green;
+}
