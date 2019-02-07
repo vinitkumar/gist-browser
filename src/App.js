@@ -1,12 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { Component } from 'react';
+import React, { lazy, Suspense, PureComponent } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './App.css';
-import Gist from './Gist';
-import GistList from './GistList';
 import fetchData from './services/api';
+import Loader from './Loader';
+const Gist = lazy(() => import('./Gist'));
+const GistList = lazy(() => import('./GistList'));
 
-class App extends Component {
+class App extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,20 +40,26 @@ class App extends Component {
           <h1><Link to="/">Gist Dashboard</Link>
             <a className="refresh" title="Refresh" onClick={this.refresh.bind(this)}>
               {!loading && <i className="fa fa-refresh"></i> }
-              {loading && <i className="fa fa-spin fa-refresh"></i>}
+              {loading && <Loader />}
             </a>
           </h1>
           { error && <div className="alert alert-danger" role="alert">error: {error} </div>}
           <div className="row">
             <div className="col-4 sidebar">
-              { !error && <GistList gists={gistList} /> }
+              { !error &&
+                <Suspense fallback={<Loader />}>
+                  <GistList gists={gistList} />
+                </Suspense>
+              }
             </div>
             <div className="col-8 main-content">
               <Route exact path="/"  render={() => <div>Welcome to the gist dashboard that shows the gists created in realtime.
                 Please click on a link in sidebar to check them.<span  role="img" aria-label="left-point-emoji">👈 </span></div>} />
               { gists && (
                 <Route path="/gist/:gistId" render={({match})=> (
-                  <Gist key={match.params.gistId} gist={gists.find(g=> g.id === match.params.gistId )} />
+                  <Suspense fallback={<Loader />}>
+                    <Gist key={match.params.gistId} gist={gists.find(g=> g.id === match.params.gistId )} />
+                  </Suspense>
                 )} />
               )}
             </div>
