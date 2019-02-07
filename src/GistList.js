@@ -1,13 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 
-
-class GistList extends Component {
-  render() {
-    return(
+function GistList(props) {
+  return(
       <div>
         <ul className="gistList">
-          {this.props.gists && this.props.gists.map((gist, key) => (
+          {props.gists && props.gists.map((gist, key) => (
             <li className="gist-item" key={key}>
               <Link to={`/gist/${gist.id}`}>
                 <img className="avatarImg" src={gist.owner.avatar_url + '&s=20'} height="20" width="20" alt="avatar-img" /><span>{gist.owner.login}'s gist</span>
@@ -18,7 +16,7 @@ class GistList extends Component {
         </ul>
       </div>
     );
-  }
 }
+
 
 export default GistList;
