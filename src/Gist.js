@@ -1,8 +1,8 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, {Fragment, PureComponent} from 'react';
 import Moment from 'moment';
 import {Link} from 'react-router-dom';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/styles/hljs';
+import {docco} from 'react-syntax-highlighter/styles/hljs';
 import Loader from './Loader';
 
 class Gist extends PureComponent {
@@ -26,10 +26,12 @@ class Gist extends PureComponent {
     let allRawFilesArray = [];
     allFiles.forEach((file, key) => {
       const raw_url = file.raw_url;
-      const fileName = file.raw_url.split('/')[file.raw_url.split('/').length - 1];
+      const fileName = file.raw_url.split('/')[
+        file.raw_url.split('/').length - 1
+      ];
       fetch(raw_url)
-        .then((response) => response.text())
-        .then((content) => {
+        .then(response => response.text())
+        .then(content => {
           allRawFilesArray.push({
             content: content,
             language: file.language,
@@ -37,7 +39,7 @@ class Gist extends PureComponent {
           });
           self.setState({
             content: content,
-            language: file.language
+            language: file.language,
           });
         });
     });
@@ -60,24 +62,30 @@ class Gist extends PureComponent {
         allFilesContainer.push(
           <div key={key}>
             <pre>{fileObject.fileName}</pre>
-            <SyntaxHighlighter language={fileObject.language} style={docco}>{fileObject.content}</SyntaxHighlighter>
-          </div>
+            <SyntaxHighlighter language={fileObject.language} style={docco}>
+              {fileObject.content}
+            </SyntaxHighlighter>
+          </div>,
         );
       });
     }
 
-    return(
-        <div className="gistResultContainer">
-          <h3>{this.gist.owner.login} shared the gist:</h3>
-          <small><pre>Created on {Moment(this.gist.created_at).format('LLL')}</pre></small>
-          <pre>{this.gist.description}</pre>
-          { this.state.loading && <Fragment><p> Please wait, loading gist</p> <Loader /> </Fragment>}
-          {! this.state.loading && allFilesContainer}
-          </div>
+    return (
+      <div className="gistResultContainer">
+        <h3>{this.gist.owner.login} shared the gist:</h3>
+        <small>
+          <pre>Created on {Moment(this.gist.created_at).format('LLL')}</pre>
+        </small>
+        <pre>{this.gist.description}</pre>
+        {this.state.loading && (
+          <Fragment>
+            <p> Please wait, loading gist</p> <Loader />{' '}
+          </Fragment>
+        )}
+        {!this.state.loading && allFilesContainer}
+      </div>
     );
   }
-
 }
-
 
 export default Gist;
