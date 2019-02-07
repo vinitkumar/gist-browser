@@ -1,15 +1,19 @@
-import React, { Component } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import Moment from 'moment';
 import {Link} from 'react-router-dom';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/styles/hljs';
+import Loader from './Loader';
 
-class Gist extends Component {
+class Gist extends PureComponent {
   constructor(props) {
     super(props);
     this.gist = this.props.gist;
     this.state = {
       allRawFiles: null,
+      language: null,
+      content: null,
+      loading: true,
     };
   }
 
@@ -37,7 +41,7 @@ class Gist extends Component {
           });
         });
     });
-    this.setState({allRawFiles: allRawFilesArray});
+    this.setState({allRawFiles: allRawFilesArray, loading: false});
   }
 
   render() {
@@ -67,7 +71,8 @@ class Gist extends Component {
           <h3>{this.gist.owner.login} shared the gist:</h3>
           <small><pre>Created on {Moment(this.gist.created_at).format('LLL')}</pre></small>
           <pre>{this.gist.description}</pre>
-          {allFilesContainer}
+          { this.state.loading && <Fragment><p> Please wait, loading gist</p> <Loader /> </Fragment>}
+          {! this.state.loading && allFilesContainer}
           </div>
     );
   }
