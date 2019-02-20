@@ -36,17 +36,19 @@ function App() {
 
   return (
     <Router>
-      <div className="container-fluid">
-        <h1>
+      <header className="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar custom-nav">
           <Link to="/">Gist Dashboard</Link>
           <a
-            className="refresh"
+            className="refresh pull-right"
             title="Refresh"
             onClick={e => handleRefresh(e)}>
             {!loading && <i className="fa fa-refresh" />}
             {loading && <Loader />}
           </a>
-        </h1>
+        </header>
+      <div className="container-fluid gist-scope-container">
+        <h1>Welcome to the Realtime Gist dashboard</h1>
+
         {error && (
           <div className="alert alert-danger" role="alert">
             error: {error}{' '}
@@ -66,11 +68,10 @@ function App() {
               path="/"
               render={() => (
                 <div>
-                  Welcome to the gist dashboard that shows the gists created in
-                  realtime. Please click on a link in sidebar to check them.
                   <span role="img" aria-label="left-point-emoji">
                     👈{' '}
                   </span>
+                  Please click on a link in sidebar to load the gist.
                 </div>
               )}
             />

@@ -37,7 +37,10 @@
 
 .gist-item a {
   word-wrap: break-word;
-  font-size: 12px;
+  font-size: 16px;
+}
+.gist-item {
+  margin-bottom: 6px;
 }
 
 .gistResultContainer {
@@ -62,4 +65,7 @@ a.refresh > i {
 }
 a.refresh > i.fa-spin {
   color: green;
+}
+.custom-nav {
+  background-color: #000000;
 }
