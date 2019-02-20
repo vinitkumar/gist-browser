@@ -1,28 +1,23 @@
-import React, {Fragment, PureComponent} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import Moment from 'moment';
 import {Link} from 'react-router-dom';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/styles/hljs';
 import Loader from './Loader';
 
-class Gist extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.gist = this.props.gist;
-    this.state = {
-      allRawFiles: null,
-      language: null,
-      content: null,
-      loading: true,
-    };
-  }
+function Gist(props) {
+  const [allRawFiles, setallRawFiles] = useState(null);
+  const [language, setlanguage] = useState(null);
+  const [content, setcontent] = useState(null);
+  const [loading, setloading] = useState(true);
 
-  componentDidMount() {
-    if (!this.gist) {
+  const gist = props.gist;
+
+  useEffect(() => {
+     if (!gist) {
       return;
     }
-    const self = this;
-    const allFiles = Object.values(this.gist.files);
+    const allFiles = Object.values(gist.files);
     let allRawFilesArray = [];
     allFiles.forEach((file, key) => {
       const raw_url = file.raw_url;
@@ -37,55 +32,54 @@ class Gist extends PureComponent {
             language: file.language,
             fileName: decodeURIComponent(fileName),
           });
-          self.setState({
-            content: content,
-            language: file.language,
-          });
+          setcontent(content);
+          setlanguage(language);
         });
     });
-    this.setState({allRawFiles: allRawFilesArray, loading: false});
-  }
+    setallRawFiles(allRawFilesArray);
+    setloading(false)
+  }, {})
 
-  render() {
-    if (!this.gist) {
+  if (!gist) {
       return (
         <div className="alert alert-danger">
           This gist is not available anymore. <Link to="/">Go home</Link>.
         </div>
       );
-    }
-    const allFiles = this.state.allRawFiles;
-    let allFilesContainer = null;
-    if (allFiles !== null) {
-      allFilesContainer = [];
-      allFiles.forEach((fileObject, key) => {
-        allFilesContainer.push(
-          <div key={key}>
-            <pre>{fileObject.fileName}</pre>
-            <SyntaxHighlighter language={fileObject.language} style={docco}>
-              {fileObject.content}
-            </SyntaxHighlighter>
-          </div>,
-        );
-      });
-    }
+  }
 
-    return (
+  const allFiles = allRawFiles;
+  let allFilesContainer = null;
+  if (allFiles !== null) {
+    allFilesContainer = [];
+    allFiles.forEach((fileObject, key) => {
+      allFilesContainer.push(
+        <div key={key}>
+          <pre>{fileObject.fileName}</pre>
+          <SyntaxHighlighter language={fileObject.language} style={docco}>
+            {fileObject.content}
+          </SyntaxHighlighter>
+        </div>,
+      );
+    });
+  }
+
+  return(
       <div className="gistResultContainer">
-        <h3>{this.gist.owner.login} shared the gist:</h3>
+        <h3>{gist.owner.login} shared the gist:</h3>
         <small>
-          <pre>Created on {Moment(this.gist.created_at).format('LLL')}</pre>
+          <pre>Created on {Moment(gist.created_at).format('LLL')}</pre>
         </small>
-        <pre>{this.gist.description}</pre>
-        {this.state.loading && (
+        <pre>{gist.description}</pre>
+        {loading && (
           <Fragment>
             <p> Please wait, loading gist</p> <Loader />{' '}
           </Fragment>
         )}
-        {!this.state.loading && allFilesContainer}
+        {!loading && allFilesContainer}
       </div>
-    );
-  }
+  );
 }
+
 
 export default Gist;
