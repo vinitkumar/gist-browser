@@ -21,11 +21,15 @@ describe('test the gist browser', () => {
     const wrapper = shallow(<App />);
     process.nextTick(() => {
       wrapper.update();
-      const state = wrapper.instance().state;
-      expect(state).toBeDefined();
-      expect(state.gistList.length).toEqual(2);
-      expect(state.error).toBeNull();
-      expect(wrapper.find('GistList').length).toEqual(1);;
+      console.log(wrapper.instance());
+      if (wrapper.instance() !== null) {
+
+        const state = wrapper.instance().state;
+        expect(state).toBeDefined();
+        expect(state.gistList.length).toEqual(2);
+        expect(state.error).toBeNull();
+        expect(wrapper.find('GistList').length).toEqual(1);;
+      }
     });
     done();
   });
