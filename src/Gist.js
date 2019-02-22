@@ -5,7 +5,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/styles/hljs';
 import Loader from './Loader';
 
-function Gist(props) {
+const Gist = React.memo(function Gist(props) {
   const [allRawFiles, setallRawFiles] = useState(null);
   const [language, setlanguage] = useState(null);
   const [content, setcontent] = useState(null);
@@ -79,7 +79,7 @@ function Gist(props) {
         {!loading && allFilesContainer}
       </div>
   );
-}
+});
 
 
 export default Gist;

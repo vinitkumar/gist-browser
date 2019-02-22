@@ -7,7 +7,7 @@ import Loader from './Loader';
 const Gist = lazy(() => import('./Gist'));
 const GistList = lazy(() => import('./GistList'));
 
-function App() {
+const App = React.memo(function App() {
   const [gistList, setgistList] = useState([]);
   const [error, seterror] = useState(null);
   const [loading, setloading] = useState(true);
@@ -93,5 +93,6 @@ function App() {
       </div>
     </Router>
   );
-}
+});
+
 export default App;
