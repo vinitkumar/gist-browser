@@ -38,7 +38,7 @@ function Gist(props) {
     });
     setallRawFiles(allRawFilesArray);
     setloading(false)
-  }, {})
+  }, []);
 
   if (!gist) {
       return (

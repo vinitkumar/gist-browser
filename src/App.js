@@ -12,7 +12,7 @@ function App() {
   const [error, seterror] = useState(null);
   const [loading, setloading] = useState(true);
 
-  function handleRefresh(event) {
+  function handleRefresh() {
     setloading(true);
     const data = fetchData();
     data.then(gists => {
@@ -66,8 +66,9 @@ function App() {
               path="/"
               render={() => (
                 <div>
-                  Welcome to the gist dashboard that shows the gists created in
-                  realtime. Please click on a link in sidebar to check them.
+                  Welcome to the "Live Gist Dashboard"
+                  <hr/>
+                  Click on a gist link on the left to open a new gist
                   <span role="img" aria-label="left-point-emoji">
                     👈{' '}
                   </span>
