@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {lazy, Suspense, useState, useEffect} from 'react';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import {createBrowserRouter as Router, Route, Link} from 'react-router-dom';
 import './App.css';
 import fetchData from './services/api';
 import Loader from './Loader';
