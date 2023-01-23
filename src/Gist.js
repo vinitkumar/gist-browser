@@ -1,15 +1,16 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment, useState, useEffect, useTransition} from 'react';
+import PropTypes from 'prop-types';
 import Moment from 'moment';
 import {Link} from 'react-router-dom';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import {docco} from 'react-syntax-highlighter/styles/hljs';
+import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Loader from './Loader';
 
 function Gist(props) {
   const [allRawFiles, setallRawFiles] = useState(null);
   const [language, setlanguage] = useState(null);
   const [content, setcontent] = useState(null);
-  const [loading, setloading] = useState(true);
+  const [ispending, startTransition] = useTransition();
 
   const gist = props.gist;
 
@@ -17,27 +18,32 @@ function Gist(props) {
      if (!gist) {
       return;
     }
-    const allFiles = Object.values(gist.files);
-    let allRawFilesArray = [];
-    allFiles.forEach((file, key) => {
-      const raw_url = file.raw_url;
-      const fileName = file.raw_url.split('/')[
+    console.log(content);
+     startTransition(() => {
+         const allFiles = Object.values(gist.files);
+        let allRawFilesArray = [];
+        allFiles.forEach((file, key) => {
+        console.log(key);
+        const raw_url = file.raw_url;
+        const fileName = file.raw_url.split('/')[
         file.raw_url.split('/').length - 1
-      ];
-      fetch(raw_url)
-        .then(response => response.text())
-        .then(content => {
-          allRawFilesArray.push({
-            content: content,
-            language: file.language,
-            fileName: decodeURIComponent(fileName),
-          });
-          setcontent(content);
-          setlanguage(language);
+            ];
+        fetch(raw_url)
+            .then(response => response.text())
+            .then(content => {
+                allRawFilesArray.push({
+                    content: content,
+                    language: file.language,
+                    fileName: decodeURIComponent(fileName),
+                });
+                setcontent(content);
+                setlanguage(language);
+
+            });
         });
-    });
-    setallRawFiles(allRawFilesArray);
-    setloading(false)
+        setallRawFiles(allRawFilesArray);
+
+     });
   }, []);
 
   if (!gist) {
@@ -56,7 +62,7 @@ function Gist(props) {
       allFilesContainer.push(
         <div key={key}>
           <pre>{fileObject.fileName}</pre>
-          <SyntaxHighlighter language={fileObject.language} style={docco}>
+          <SyntaxHighlighter language={fileObject.language} style={dark}>
             {fileObject.content}
           </SyntaxHighlighter>
         </div>,
@@ -71,15 +77,23 @@ function Gist(props) {
           <pre>Created on {Moment(gist.created_at).format('LLL')}</pre>
         </small>
         <pre>{gist.description}</pre>
-        {loading && (
+        {ispending && (
           <Fragment>
             <p> Please wait, loading gist</p> <Loader />{' '}
           </Fragment>
         )}
-        {!loading && allFilesContainer}
+        {!ispending && allFilesContainer}
       </div>
   );
 }
+
+Gist.propTypes = {
+  gist: PropTypes.object,
+  files: PropTypes.array,
+  owner: PropTypes.object,
+  created_at: PropTypes.string,
+  description: PropTypes.string,
+};
 
 
 export default Gist;
